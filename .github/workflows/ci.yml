@@ -1,0 +1,71 @@
+name: CI
+
+on:
+  push:
+  pull_request:
+    branches:
+      - master
+jobs:
+  lint:
+    name: Run eslint 🧹
+    runs-on: ubuntu-latest
+    if: "!contains(github.event.head_commit.message, 'skip-ci')"
+    steps:
+      - name: Checkout 🛎
+        uses: actions/checkout@v4
+      - name: Setup PNPM 🧰
+        uses: wyvox/action-setup-pnpm@v3
+        with:
+          node-version: 'lts/*'
+          args: --frozen-lockfile --strict-peer-dependencies
+      - name: Check prettier 💅
+        run: pnpm exec prettier --check --cache --ignore-unknown --ignore-path=.gitignore .
+      - name: Run eslint 🧹
+        run: pnpm lint
+      - name: Run typescript 🧪
+        run: pnpm exec tsc --noEmit --noErrorTruncation --pretty false --incremental false
+  test:
+    name: Run the tests 🧪
+    runs-on: ubuntu-latest
+    if: "!contains(github.event.head_commit.message, 'skip-ci')"
+    needs: [lint]
+    services:
+      mysql:
+        image: mysql:8.0-debian
+        env:
+          MYSQL_DATABASE: Armchair
+          MYSQL_USER: Cursive0069
+          MYSQL_PASSWORD: m499ea5RnsrfqE
+          MYSQL_ALLOW_EMPTY_PASSWORD: 'yes'
+        ports:
+          - '3306:3306'
+        options: --health-cmd "mysqladmin ping -u ${MYSQL_USER} --password=${MYSQL_PASSWORD}" --health-interval=10s --health-timeout=20s --health-retries=10
+    steps:
+      - name: Checkout 🛎
+        uses: actions/checkout@v4
+      - name: Setup PNPM 🧰
+        uses: wyvox/action-setup-pnpm@v3
+        with:
+          node-version: 'lts/*'
+          args: --frozen-lockfile --strict-peer-dependencies
+      - name: Run tests 🧪
+        run: pnpm test
+        env:
+          MYSQL_DATABASE: Armchair
+          MYSQL_USER: Cursive0069
+          MYSQL_PASSWORD: m499ea5RnsrfqE
+  build:
+    name: Build the project 🏗
+    runs-on: ubuntu-latest
+    if: "!contains(github.event.head_commit.message, 'skip-ci')"
+    needs: [lint]
+    steps:
+      - name: Checkout 🛎
+        uses: actions/checkout@v4
+      - name: Setup PNPM 🧰
+        uses: wyvox/action-setup-pnpm@v3
+        with:
+          node-version: 'lts/*'
+          args: --frozen-lockfile --strict-peer-dependencies
+      - name: Build 🏗
+        run: pnpm build
