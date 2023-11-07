@@ -1,0 +1,33 @@
+components:
+  schemas:
+    CreateBrand:
+      type: object
+      properties:
+        name:
+          type: string
+          minLength: 1
+      required:
+        - name
+    UpdateBrand:
+      type: object
+      properties:
+        name:
+          type: string
+          minLength: 1
+      required:
+        - name
+    Brands:
+      type: array
+      items:
+        $ref: '#/components/schemas/Brand'
+    Brand:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        name:
+          type: string
+      required:
+        - id
+        - name

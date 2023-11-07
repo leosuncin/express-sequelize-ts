@@ -1,0 +1,42 @@
+services:
+  api:
+    build: .
+    ports:
+      - '3000:3000'
+    depends_on:
+      mysql:
+        condition: service_healthy
+    environment:
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+      MYSQL_HOST: mysql
+    labels:
+      autoheal: 'true'
+    restart: unless-stopped
+
+  mysql:
+    labels:
+      autoheal: 'true'
+    restart: unless-stopped
+
+  autoheal:
+    image: willfarrell/autoheal
+    environment:
+      AUTOHEAL_INTERVAL: 30
+      AUTOHEAL_START_PERIOD: 15
+    volumes:
+      - '/var/run/docker.sock:/var/run/docker.sock'
+    restart: unless-stopped
+
+  uptime-kuma:
+    image: louislam/uptime-kuma:1
+    ports:
+      - '3001:3001'
+    volumes:
+      - uptime-kuma:/app/data
+      - '/var/run/docker.sock:/var/run/docker.sock'
+    restart: unless-stopped
+
+volumes:
+  uptime-kuma:

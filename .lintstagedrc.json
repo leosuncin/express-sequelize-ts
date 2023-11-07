@@ -1,0 +1,6 @@
+{
+  "*": ["prettier -wu --ignore-path .gitignore"],
+  "*.{js,ts}": ["eslint --ignore-path .gitignore --fix"],
+  "*.md": ["markdownlint-cli2 --fix"],
+  "package.json": ["sort-package-json"]
+}
