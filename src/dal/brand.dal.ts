@@ -27,7 +27,7 @@ export function getAll(
 
 export async function updateById(
   id: number,
-  payload: Partial<Omit<BrandInput, 'id'>>,
+  payload: Partial<BrandInput>,
 ): Promise<BrandOutput> {
   const brand = await Brand.findByPk(id);
 
