@@ -1,0 +1,104 @@
+components:
+  schemas:
+    CreateProduct:
+      type: object
+      properties:
+        name:
+          type: string
+          minLength: 1
+        listPrice:
+          type: number
+          format: double
+          minimum: 0
+        modelYear:
+          type: integer
+          format: int32
+          minimum: 1900
+        brandId:
+          type: integer
+          format: int64
+          minimum: 1
+        categoryId:
+          type: integer
+          format: int64
+          minimum: 1
+      required:
+        - name
+    UpdateProduct:
+      type: object
+      properties:
+        name:
+          type: string
+          minLength: 1
+        listPrice:
+          type: number
+          format: double
+          minimum: 0
+        modelYear:
+          type: integer
+          format: int32
+          minimum: 1900
+        brandId:
+          type: integer
+          format: int64
+          minimum: 1
+        categoryId:
+          type: integer
+          format: int64
+          minimum: 1
+    Products:
+      type: array
+      items:
+        $ref: '#/components/schemas/Product'
+    Product:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        name:
+          type: string
+        listPrice:
+          type: number
+          format: double
+        modelYear:
+          type: integer
+          format: int32
+        brandId:
+          type: integer
+          format: int64
+        categoryId:
+          type: integer
+          format: int64
+      required:
+        - id
+        - name
+        - listPrice
+        - modelYear
+        - brandId
+        - categoryId
+    ProductPopulated:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        name:
+          type: string
+        listPrice:
+          type: number
+          format: double
+        modelYear:
+          type: integer
+          format: int32
+        brand:
+          $ref: '#/components/schemas/Brand'
+        category:
+          $ref: '#/components/schemas/Category'
+      required:
+        - id
+        - name
+        - listPrice
+        - modelYear
+        - brand
+        - category
