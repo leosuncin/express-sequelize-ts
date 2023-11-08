@@ -1,23 +1,35 @@
-import { DataTypes, Model, type Optional } from 'sequelize';
+import {
+  type Attributes,
+  type CreationAttributes,
+  type CreationOptional,
+  DataTypes,
+  type InferAttributes,
+  type InferCreationAttributes,
+  Model,
+} from 'sequelize';
 
 import { sequelizeConnection } from '@/config/sequelize';
 
-type CategoryAttributes = {
-  id: number;
-  name: string;
-};
+export type CategoryInput = Omit<
+  CreationAttributes<Category>,
+  'id' | 'createdAt' | 'updatedAt' | 'deletedAt'
+>;
 
-export type CategoryInput = Optional<CategoryAttributes, 'id'>;
+export type CategoryOutput = Attributes<Category>;
 
-export type CategoryOutput = Required<CategoryAttributes>;
-
-export class Category
-  extends Model<CategoryAttributes, CategoryInput>
-  implements CategoryAttributes
-{
-  public declare id: number;
+export class Category extends Model<
+  InferAttributes<Category>,
+  InferCreationAttributes<Category>
+> {
+  public declare id: CreationOptional<number>;
 
   public declare name: string;
+
+  public declare createdAt: CreationOptional<Date>;
+
+  public declare updatedAt: CreationOptional<Date>;
+
+  public declare deletedAt: CreationOptional<Date>;
 }
 
 Category.init(
@@ -31,10 +43,14 @@ Category.init(
       type: DataTypes.STRING,
       allowNull: false,
     },
+    createdAt: DataTypes.DATE,
+    updatedAt: DataTypes.DATE,
+    deletedAt: DataTypes.DATE,
   },
   {
     sequelize: sequelizeConnection,
     paranoid: true,
-    modelName: 'category',
+    timestamps: true,
+    tableName: 'categories',
   },
 );

@@ -31,7 +31,7 @@ export function getAll(
 
 export async function updateById(
   id: number,
-  payload: Partial<Omit<CategoryInput, 'id'>>,
+  payload: Partial<CategoryInput>,
 ): Promise<CategoryOutput> {
   const category = await Category.findByPk(id);
 
