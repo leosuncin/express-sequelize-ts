@@ -16,6 +16,7 @@ declare global {
       MYSQL_USER: string;
       MYSQL_PASSWORD: string;
       MYSQL_DATABASE: string;
+      JWT_SECRET: string;
     }
   }
 }
@@ -32,4 +33,5 @@ export const env = cleanEnv(process.env, {
   MYSQL_USER: str({ desc: 'MySQL user', default: 'root' }),
   MYSQL_PASSWORD: str({ desc: 'Password for the MySQL user' }),
   MYSQL_DATABASE: str({ desc: 'MySQL database name' }),
+  JWT_SECRET: str({ desc: 'JWT secret', devDefault: 'eu-sint-ntd-amt' }),
 });

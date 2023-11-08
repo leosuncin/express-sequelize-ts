@@ -1,3 +1,5 @@
+import '@/config/passport';
+
 import express from 'express';
 import paginate from 'express-paginate';
 import openapi from 'openapi-comment-parser';
